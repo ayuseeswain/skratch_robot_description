@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<robot name="skratch_wheel_drive" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="skratch_wheel_drive" params="name parent">
+        <xacro:include filename="wheels/skratch_wheel.xacro"/>
+
+        <!-- <xacro:if value="${movable_joints}">
+            <transmission name="${name}_transmission">
+                <type>transmission_interface/SimpleTransmission</type>
+                <joint name="${name}_pivot_joint">
+                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                </joint>
+                <actuator name="${name}_pivot_motor">
+                    <mechanicalReduction>1.0</mechanicalReduction>
+                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                </actuator>
+            </transmission>
+        </xacro:if> -->
+
+       
+        <link name="${name}">
+            <inertial>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57" />
+                <mass value="0.5" />
+                <inertia ixx="0.001773" iyy="0.001755" izz="0.001341" ixy="0.0" iyz="0.0" ixz="0.0" />
+            </inertial>
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/wheels/kelo_drive_base.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="LightGrey">
+                    <color rgba="0.8 0.8 0.8 1.0"/>
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/wheels/kelo_drive_base.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <gazebo reference="${name}">
+            <material>Gazebo/LightGrey</material>
+        </gazebo>
+        
+        <xacro:skratch_wheel name="${name}_wheel_left" parent="${name}"/>
+        <joint name="${name}_wheel_left_joint" type="continuous">
+        <!-- <joint name="${name}_wheel_left_joint" type="fixed"> -->
+            <origin xyz="0.01 0.04 -0.09" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}"/>
+            <child link="${name}_wheel_left"/>
+            <axis xyz="0.0 1.0 0.0"/>
+            <gazebo>
+                <mu1>1.0</mu1>
+                <mu2>1.0</mu2>
+                <kp>100000.0</kp>
+                <kd>1.0</kd>
+                <fdir1>0 0 0</fdir1>
+            </gazebo>
+        </joint>
+
+        <xacro:skratch_wheel name="${name}_wheel_right" parent="${name}"/>
+        <joint name="${name}_wheel_right_joint" type="continuous">
+        <!-- <joint name="${name}_wheel_right_joint" type="fixed"> -->
+            <origin xyz="0.01 -0.04 -0.09" rpy="0.0 0.0 0.0"/>
+            <parent link="${name}"/>
+            <child link="${name}_wheel_right"/>
+            <axis xyz="0.0 1.0 0.0"/>
+            <gazebo>
+                <mu1>1.0</mu1>
+                <mu2>1.0</mu2>
+                <kp>100000.0</kp>
+                <kd>1.0</kd>
+                <fdir1>0 0 0</fdir1>
+            </gazebo>
+        </joint>
+    </xacro:macro>
+</robot>

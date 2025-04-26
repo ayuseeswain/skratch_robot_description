@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot name="skratch_wheel" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="skratch_wheel" params="name parent">
+
+        <!-- <xacro:if value="${movable_joints}">
+            
+            <transmission name="${name}_transmission">
+                <type>transmission_interface/SimpleTransmission</type>
+                <joint name="${name}_joint">
+                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                </joint>
+                <actuator name="${name}_motor">
+                    <mechanicalReduction>1.0</mechanicalReduction>
+                    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                </actuator>
+            </transmission>
+        </xacro:if> -->
+
+
+        <link name="${name}">
+            <inertial>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0" />
+                <mass value="0.25" />
+                <inertia ixx="0.0001913" iyy="0.0001913" izz="0.0003315" ixy="0.0" iyz="0.0" ixz="0.0" />
+            </inertial>
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/wheels/kelo_drive_wheel.stl" scale="1 1 1"/>
+                </geometry>
+                <material name="Black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/wheels/kelo_drive_wheel.stl" scale="1 1 1"/>
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/Black</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

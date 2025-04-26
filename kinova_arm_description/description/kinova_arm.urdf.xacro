@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<robot name="kinova_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="arm/kinova_base.xacro"/>
+    <xacro:include filename="arm/kinova_shoulder.xacro"/>
+    <xacro:include filename="arm/kinova_half_arm_one.xacro"/>
+    <xacro:include filename="arm/kinova_half_arm_two.xacro"/>
+    <xacro:include filename="arm/kinova_fore_arm.xacro"/>
+    <xacro:include filename="arm/kinova_spherical_wrist_one.xacro"/>
+    <xacro:include filename="arm/kinova_spherical_wrist_two.xacro"/>
+    <xacro:include filename="arm/kinova_camera.xacro"/>
+    <xacro:include filename="gripper/gripper_base.xacro"/>
+    <xacro:include filename="gripper/gripper_finger.xacro"/>
+    <xacro:include filename="kinova_arm_gazebo.xacro"/>
+    <xacro:include filename="$(find kinova_arm_moveit_config)/config/kinova_arm.ros2_control.xacro"/>
+
+    <xacro:kinova_arm_ros2_control name="kinova_arm" initial_positions_file="$(find kinova_arm_moveit_config)/config/initial_positions.yaml"/>
+    
+    <link name="arm_base_link">
+        <inertial>
+            <mass value="10.0"/>   
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.0" ixy="0" ixz="0" iyy="1.0" iyz="0" izz="1.0"/>
+        </inertial>
+    </link>
+    
+      
+    <xacro:kinova_base/>
+    <joint name="arm_base_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 3.14"/>
+        <parent link="arm_base_link"/>
+        <child link="kinova_base"/>
+    </joint>
+
+    <xacro:kinova_shoulder/>
+    <joint name="shoulder_joint" type="continuous">
+        <origin xyz="0 0.154 0" rpy="0 0 0"/>
+        <parent link="kinova_base"/>
+        <child link="kinova_shoulder"/>
+        <axis xyz="0.0 1.0 0.0"/>
+    </joint>
+
+    <xacro:kinova_half_arm_one/>
+    <joint name="half_arm_one_joint" type="revolute">
+        <origin xyz="0 0.126 0" rpy="0 0 0"/>
+        <parent link="kinova_shoulder"/>
+        <child link="kinova_half_arm_one"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-2.249729" upper="2.249729" effort="1000" velocity="1000"/>
+    </joint>
+
+    <xacro:kinova_half_arm_two/>
+    <joint name="half_arm_two_joint" type="continuous">
+        <origin xyz="0 0.2 -0.011" rpy="0 0 0"/>
+        <parent link="kinova_half_arm_one"/>
+        <child link="kinova_half_arm_two"/>
+        <axis xyz="0.0 1.0 0.0"/>
+    </joint>
+
+    <xacro:kinova_fore_arm/>
+    <joint name="fore_arm_joint" type="revolute">
+        <origin xyz="0 0.22 0" rpy="0 0 0"/>
+        <parent link="kinova_half_arm_two"/>
+        <child link="kinova_fore_arm"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-2.579597" upper="2.579597" effort="1000" velocity="1000"/>
+    </joint>
+
+    <xacro:kinova_spherical_wrist_one/>
+    <joint name="spherical_wrist_one_joint" type="continuous">
+        <origin xyz="0 0.21 -0.012" rpy="0 0 0"/>
+        <parent link="kinova_fore_arm"/>
+        <child link="kinova_spherical_wrist_one"/>
+        <axis xyz="0.0 1.0 0.0"/>
+    </joint>
+
+    <xacro:kinova_spherical_wrist_two/>
+    <joint name="spherical_wrist_two_joint" type="revolute">
+        <origin xyz="0 0.1035 0" rpy="0 0 0"/>
+        <parent link="kinova_spherical_wrist_one"/>
+        <child link="kinova_spherical_wrist_two"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-2.099631" upper="2.099631" effort="1000" velocity="1000"/>
+    </joint>
+
+    <xacro:kinova_camera/>
+    <joint name="camera_joint" type="continuous">
+        <origin xyz="0 0.11 0" rpy="0 0 0"/>
+        <parent link="kinova_spherical_wrist_two"/>
+        <child link="kinova_camera"/>
+        <axis xyz="0.0 1.0 0.0"/>
+    </joint>
+
+    <xacro:gripper_base />
+    <joint name="gripper_base_joint" type="fixed">
+        <origin xyz="0 0.062 0" rpy="0 1.57 0"/>
+        <parent link="kinova_camera"/>
+        <child link="gripper_base"/>
+    </joint>
+
+    <xacro:gripper_finger name="left"/>
+    <joint name="left_finger_joint" type="prismatic">
+        <origin xyz="-0.027 0.03 0" rpy="0 1.57 1.57"/>
+        <parent link="gripper_base"/>
+        <child link="left_gripper_finger"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="-0.026" upper="0.0" effort="1000" velocity="1000"/>
+    </joint>
+
+    <xacro:gripper_finger name="right"/>
+    <joint name="right_finger_joint" type="prismatic">
+        <origin xyz="0.027 0.03 0" rpy="-1.57 -1.57 0"/>
+        <parent link="gripper_base"/>
+        <child link="right_gripper_finger"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="-0.026" upper="0.0" effort="1000" velocity="1000"/>
+    </joint>
+
+    <link name="kinova_camera_optical_frame"/>
+    <joint name="kinova_camera_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 1.57 1.57"/> 
+        <parent link="kinova_camera"/>
+        <child link="kinova_camera_optical_frame"/>
+    </joint>
+
+    
+</robot>

@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<robot name="skratch_base" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="base/skratch_bottom_base.xacro"/> 
+    <xacro:include filename="base/skratch_top_base.xacro"/>
+    <xacro:include filename="base/skratch_wheel_support.xacro"/>
+    <xacro:include filename="wheels/skratch_wheel_drive.xacro"/>
+    <xacro:include filename="lidar/lidar.xacro"/>
+    <xacro:include filename="skratch_gazebo.xacro"/>
+    <xacro:include filename="base/skratch_arm_base_plate.xacro"/>
+    <xacro:include filename="$(find kinova_arm_description)/description/kinova_arm.urdf.xacro"/>
+
+    
+
+    <link name="base_link"></link>
+    
+    <xacro:skratch_top_base name="skratch_left_top_base"/>
+    <joint name="base_joint" type="fixed">
+        <origin xyz="0.0 -0.005 0.15" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="skratch_left_top_base"/>
+    </joint>
+
+    <xacro:skratch_top_base name="skratch_right_top_base"/>
+    <joint name="right_top_base_joint" type="fixed">
+        <origin xyz="0.0 0.003 0.15" rpy="0.0 0.0 3.14"/>
+        <parent link="base_link"/>
+        <child link="skratch_right_top_base"/>
+    </joint>
+
+    <xacro:skratch_bottom_base name="skratch_left_bottom_base"/>
+    <joint name="left_bottom_base_joint" type="fixed">
+        <origin xyz="0.0 -0.099 -0.138" rpy="3.14 0.0 0.0"/>
+        <parent link="skratch_left_top_base"/>
+        <child link="skratch_left_bottom_base"/>
+    </joint>
+
+    <xacro:skratch_bottom_base name="skratch_right_bottom_base"/>
+    <joint name="right_bottom_base_joint" type="fixed">
+        <origin xyz="0.0 -0.099 -0.138" rpy="3.14 0.0 0.0"/>
+        <parent link="skratch_right_top_base"/>
+        <child link="skratch_right_bottom_base"/>
+    </joint>
+
+    <xacro:skratch_wheel_support name="skratch_left_wheel_support"/> 
+    <joint name="left_wheel_support_joint" type="fixed">
+        <origin xyz="0.0 0.0 -0.1022" rpy="0.0 0.0 0.0"/>
+        <parent link="skratch_left_bottom_base"/>
+        <child link="skratch_left_wheel_support"/>
+    </joint>
+
+    <xacro:skratch_wheel_support name="skratch_right_wheel_support"/>
+    <joint name="right_wheel_support_joint" type="fixed">
+        <origin xyz="0.0 0.0 -0.1022" rpy="0.0 0.0 0.0"/>
+        <parent link="skratch_right_bottom_base"/>
+        <child link="skratch_right_wheel_support"/>
+    </joint>
+
+    <xacro:skratch_arm_base_plate name="skratch_arm_base_plate"/>
+    <joint name="arm_base_plate_joint" type="fixed">
+        <origin xyz="0.2115 0.0 0.023" rpy="0.0 0.0 0.0"/>
+        <parent link="skratch_left_top_base"/>
+        <child link="skratch_arm_base_plate"/>
+    </joint>
+
+    <joint name="kinova_arm_base_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="skratch_arm_base_plate"/>
+        <child link="arm_base_link"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+
+    <xacro:skratch_wheel_drive name="front_left_wheel_drive" parent="skratch_left_wheel_support" />
+    <joint name="front_left_wheel_drive_joint" type="fixed">
+    <!-- <joint name="front_left_wheel_drive_joint" type="continuous"> -->
+        <origin xyz="0.2 0.0 0.018" rpy="3.14 0.0 0.0"/>
+        <parent link="skratch_left_wheel_support"/>
+        <child link="front_left_wheel_drive"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+
+    <xacro:skratch_wheel_drive name="front_right_wheel_drive" parent="skratch_right_wheel_support" />
+    <joint name="front_right_wheel_drive_joint" type="fixed">
+    <!-- <joint name="front_right_wheel_drive_joint" type="continuous"> -->
+        <origin xyz="-0.2 0.0 0.018" rpy="3.14 0.0 0.0"/>
+        <parent link="skratch_right_wheel_support"/>
+        <child link="front_right_wheel_drive"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+
+    <xacro:skratch_wheel_drive name="rear_left_wheel_drive" parent="skratch_left_wheel_support"/>
+    <joint name="rear_left_wheel_drive_joint" type="fixed">
+    <!-- <joint name="rear_left_wheel_drive_joint" type="continuous"> -->
+        <origin xyz="-0.2 0.0 0.018" rpy="3.14 0.0 0.0"/>
+        <parent link="skratch_left_wheel_support"/>
+        <child link="rear_left_wheel_drive"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+
+    <xacro:skratch_wheel_drive name="rear_right_wheel_drive" parent="skratch_right_wheel_support"/>
+    <joint name="rear_right_wheel_drive_joint" type="fixed">
+    <!-- <joint name="rear_right_wheel_drive_joint" type="continuous"> -->
+        <origin xyz="0.2 0.0 0.018" rpy="3.14 0.0 0.0"/>
+        <parent link="skratch_right_wheel_support"/>
+        <child link="rear_right_wheel_drive"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+
+    <xacro:lidar name="front_lidar"/>
+    <joint name="front_lidar_joint" type="fixed">
+        <origin xyz="0.318 -0.203 -0.1635" rpy="0.0 0.0 0.820305"/>
+        <parent link="skratch_left_top_base"/>
+        <child link="front_lidar"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+
+    <xacro:lidar name="rear_lidar"/>
+    <joint name="rear_lidar_joint" type="fixed">
+        <origin xyz="0.318 -0.203 -0.1635" rpy="0.0 0.0 2.3214"/>
+        <parent link="skratch_right_top_base"/>
+        <child link="rear_lidar"/>
+        <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+</robot>

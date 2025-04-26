@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="kinova_base" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="kinova_base">
+        <link name="kinova_base">
+            <inertial>
+                <origin xyz="0.0007117526096760857 0.07634930281943218 0.00010627340345302608" rpy="0.0 0.0 0.0" />
+                <mass value="1.697" />
+                <inertia ixx="0.004622" ixy="9E-06" ixz="6E-05" iyy="0.004495" iyz="9E-06" izz="0.002079" />
+            </inertial>
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/arm/kinova_base.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="carbon_fiber">
+                    <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/arm/kinova_base.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="kinova_base">
+            <material>Gazebo/LightBlue</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

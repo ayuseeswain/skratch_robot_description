@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="gripper_base" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="gripper_base">
+        <link name="gripper_base">
+            <inertial>
+                <origin xyz="0.00021987 -2.3546E-10 0.030163" rpy="0 0 0" />
+                <mass value="0.30915" />
+                <inertia ixx="0.00028972" ixy="-5.7879E-10" ixz="-1.8543E-06" iyy="0.00030737" iyz="1.682E-12" izz="0.00019914" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="-1.57 1.57 0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/arm/gripper/gripper_base.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="carbon_fiber">
+                    <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="-1.57 1.57 0" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/arm/gripper/gripper_base.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+              </collision>
+        </link>
+        <gazebo reference="gripper_base">
+            <material>Gazebo/LightBlue</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

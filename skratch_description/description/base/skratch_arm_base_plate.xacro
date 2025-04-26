@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="skratch_arm_base_plate" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="skratch_arm_base_plate" params="name">
+        <link name="${name}">
+            <inertial>
+                <origin xyz="-0.005834 0.005516 0.0025" rpy="0 0 0" />
+                <mass value="0.5"/>
+                <inertia ixx="0.001543" iyy="0.006738" izz="0.006223" ixy="0.0" iyz="0.0" ixz="0.0" />
+            </inertial>
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/base/skratch_arm_base_plate.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="Grey">
+                    <color rgba="0.5 0.5 0.5 1.0"/>
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/base/skratch_arm_base_plate.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/Grey</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

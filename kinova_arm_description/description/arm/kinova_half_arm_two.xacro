@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="kinova_half_arm_two" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="kinova_half_arm_two">
+        <link name="kinova_half_arm_two">
+            <inertial>
+                <origin xyz="0.09866225956007688 0.006787291572545321 2.2830542429196597e-06" rpy="0.0 0.0 0.0" />
+                <mass value="1.1636" />
+                <inertia ixx="0.010932" ixy="0" ixz="-7E-06" iyy="0.011127" iyz="0.000606" izz="0.001043" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0.22 0" rpy="1.57 0 -1.57" />
+                <geometry>
+                    <mesh filename="file://$(find kinova_arm_description)/meshes/arm/kinova_half_arm_two.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="carbon_fiber">
+                    <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0.22 0" rpy="1.57 0 -1.57" />
+                <geometry>
+                    <mesh filename="file://$(find kinova_arm_description)/meshes/arm/kinova_half_arm_two.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="kinova_half_arm_two">
+            <material>Gazebo/LightBlue</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

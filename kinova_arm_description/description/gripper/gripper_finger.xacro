@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="gripper_finger" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="gripper_finger" params="name" >
+        <link name="${name}_gripper_finger">
+            <inertial>
+                <origin xyz="0 0.004879 0.032487" rpy="0 0 0"/>
+                <mass value="0.050913" />
+                <inertia ixx="2.592e-05" ixy="0" ixz="0" iyy="2.590e-05" iyz="0" izz="2.626e-06"/>
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find kinova_arm_description)/meshes/gripper/gripper_finger.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="">
+                    <color rgba="0.1 0.1 0.1 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="file://$(find kinova_arm_description)/meshes/gripper/gripper_finger.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+              </collision>
+        </link>
+        <gazebo reference="${name}_gripper_finger">
+            <material>Gazebo/Black</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

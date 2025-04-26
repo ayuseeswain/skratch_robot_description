@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="kinova_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="kinova_camera">
+        <link name="kinova_camera">
+            <inertial>
+                <origin xyz="0.060574574716361816 0.009255380929244132 -3.3978512789246475e-09" rpy="0.0 0.0 0.0" />
+                <mass value="0.5006" />
+                <inertia ixx="0.000587" ixy="3E-06" ixz="3E-06" iyy="0.000369" iyz="0.000118" izz="0.000609" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="-1.57 -1.57 0" />
+                <geometry>
+                    <mesh filename="file://$(find kinova_arm_description)/meshes/arm/kinova_camera.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="carbon_fiber">
+                    <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="-1.57 -1.57 0" />
+                <geometry>
+                    <mesh filename="file://$(find kinova_arm_description)/meshes/arm/kinova_camera.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="kinova_camera">
+            <material>Gazebo/LightBlue</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

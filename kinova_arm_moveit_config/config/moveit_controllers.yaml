@@ -1,0 +1,24 @@
+# MoveIt uses this configuration for controller management
+
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - kinova_arm_controller
+    - kinova_gripper_controller
+
+  kinova_arm_controller:
+    type: FollowJointTrajectory
+    joints:
+      - shoulder_joint
+      - half_arm_one_joint
+      - half_arm_two_joint
+      - fore_arm_joint
+      - spherical_wrist_one_joint
+      - spherical_wrist_two_joint
+      - camera_joint
+  kinova_gripper_controller:
+    type: FollowJointTrajectory
+    joints:
+      - left_finger_joint
+      - right_finger_joint

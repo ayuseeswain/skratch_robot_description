@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="kinova_spherical_wrist_two" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="kinova_spherical_wrist_two">
+        <link name="kinova_spherical_wrist_two">
+            <inertial>
+                <origin xyz="0.060574574716361816 0.009255380929244132 -3.3978512789246475e-09" rpy="0.0 0.0 0.0" />
+                <mass value="0.6781" />
+                <inertia ixx="0.001641" ixy="0" ixz="0" iyy="0.00041" iyz="-0.000278" izz="0.001641" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0.1035 0" rpy="1.57 3.14 1.57" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/arm/kinova_spherical_wrist_two.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="carbon_fiber">
+                    <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0.1035 0" rpy="1.57 3.14 1.57" />
+                <geometry>
+                    <mesh filename="file://$(find skratch_description)/meshes/arm/kinova_spherical_wrist_two.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="kinova_spherical_wrist_two">
+            <material>Gazebo/LightBlue</material>
+        </gazebo>
+    </xacro:macro>
+</robot>
