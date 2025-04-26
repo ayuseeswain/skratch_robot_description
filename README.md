@@ -1,0 +1,1 @@
+This repository consists of skratch robot description.
