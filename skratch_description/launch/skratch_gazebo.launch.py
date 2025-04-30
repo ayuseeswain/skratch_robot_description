@@ -10,12 +10,11 @@ import xacro
 
 
 def generate_launch_description():
-    # Declare the use_sim_time launch argument
+
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
 
     package_name = 'skratch_description'
 
-    # Process the xacro to get robot description
     pkg_path = get_package_share_directory(package_name)
     xacro_file = os.path.join(pkg_path, 'description', 'skratch_robot.urdf.xacro')
     rviz_config_file = os.path.join(pkg_path, 'config', 'simulation.rviz')
@@ -23,7 +22,6 @@ def generate_launch_description():
     robot_description_config = xacro.process_file(xacro_file)
     robot_description = {'robot_description': robot_description_config.toxml(), 'use_sim_time': use_sim_time}
 
-    # Launch robot_state_publisher
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -31,7 +29,6 @@ def generate_launch_description():
         parameters=[robot_description]
     )
 
-    # Load controllers
     load_joint_state_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'joint_state_broadcaster'],
         output='screen'
@@ -46,24 +43,7 @@ def generate_launch_description():
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 'kinova_gripper_controller'],
         output='screen'
     )
-
-    # Launch RViz only after all controllers are loaded
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        arguments=['-d', rviz_config_file],
-        parameters=[{'use_sim_time': use_sim_time}],
-        output='screen'
-    )
-
-    launch_rviz_after_controllers = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=load_joint_state_controller,
-            on_exit=[rviz_node]
-        )
-    )
-
+    
     static_tf_base_footprint_to_base_link = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -71,19 +51,13 @@ def generate_launch_description():
         output='screen'
     )
 
-    static_tf_odom_to_base_link = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'odom', 'base_link'],
-        output='screen'
-    )
-
-
-    # Launch Gazebo with ROS integration
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
-        )
+        ),
+        launch_arguments={
+            'world': os.path.join(pkg_path, 'config', 'environment.sdf')
+        }.items()
     )
 
     # Spawn robot entity in Gazebo
@@ -91,10 +65,17 @@ def generate_launch_description():
         package='gazebo_ros',
         executable='spawn_entity.py',
         arguments=['-topic', 'robot_description', '-entity', 'skratch'],
-        output='screen'
+        output='screen',
     )
 
-    # Delay spawn to ensure Gazebo is ready
+    lidar_remap_node = Node(
+        package='topic_tools',
+        executable='relay',
+        name='lidar_remap',
+        parameters=[{'input_topic': '/lidar_front/out', 'output_topic': '/scan'}],
+        output='screen'
+    )
+    
     delayed_spawn = TimerAction(
         period=1.0,
         actions=[spawn_entity]
@@ -132,8 +113,7 @@ def generate_launch_description():
             )
         ),
 
-        launch_rviz_after_controllers,
         static_tf_base_footprint_to_base_link,
-        static_tf_odom_to_base_link
+        lidar_remap_node
 
     ])
