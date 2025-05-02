@@ -31,7 +31,7 @@
                 </scan>
                 <range>
                     <min>0.025</min>
-                    <max>3.0</max>
+                    <max>5.6</max>
                     <resolution>0.01</resolution>
                 </range>
             </ray>
@@ -43,5 +43,7 @@
                 <frame_name>front_lidar</frame_name>
             </plugin>
         </sensor>
-    </gazebo>      
+    </gazebo>
+    
+   
 </robot>

@@ -56,7 +56,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
         ),
         launch_arguments={
-            'world': os.path.join(pkg_path, 'config', 'environment.sdf')
+            'world': os.path.join(pkg_path, 'config', 'simple_environment.sdf')
         }.items()
     )
 
