@@ -9,7 +9,11 @@ from launch_ros.actions import Node
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
 
-    # Paths to launch files
+    slam_params_file = os.path.join(
+        get_package_share_directory('skratch_description'),
+        'config', 'slam_parameters.yaml'
+    )
+
     nav2_launch_file = os.path.join(
         get_package_share_directory('nav2_bringup'),
         'launch', 'navigation_launch.py'
@@ -20,7 +24,6 @@ def generate_launch_description():
         'launch', 'online_async_launch.py'
     )
 
-    # RViz configuration for Nav2
     rviz_config_file = '/opt/ros/humble/share/nav2_bringup/rviz/nav2_default_view.rviz'
 
     nav2_launch = IncludeLaunchDescription(
@@ -30,7 +33,10 @@ def generate_launch_description():
 
     slam_toolbox_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(slam_launch_file),
-        launch_arguments={'use_sim_time': 'true'}.items()
+        launch_arguments={
+            'use_sim_time': 'true',
+            'slam_params_file': slam_params_file
+        }.items()
     )
 
     rviz_node = Node(
