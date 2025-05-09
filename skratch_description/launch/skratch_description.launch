@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Declare argument -->
+    <arg name="use_sim_time" default="false" />
+
+    <!-- Set use_sim_time param -->
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Process the xacro file and load as robot_description -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find skratch_description)/description/skratch_robot.urdf.xacro'" />
+
+    <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+    </node>
+
+    <!-- Joint state publisher GUI -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+    </node>
+
+    <!-- RViz -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find skratch_description)/config/robot.rviz" output="screen" /> -->
+</launch>

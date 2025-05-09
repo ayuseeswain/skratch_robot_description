@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="kinova_spherical_wrist_one" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="kinova_spherical_wrist_one" xmlns:xacro="http://ros.org/wiki/xacro">
     <xacro:macro name="kinova_spherical_wrist_one">
         <link name="kinova_spherical_wrist_one">
             <inertial>

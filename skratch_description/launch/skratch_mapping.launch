@@ -1,0 +1,19 @@
+<launch>
+    <!-- Use simulation time -->
+    <arg name="use_sim_time" default="true" />
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Load SLAM (gmapping) -->
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+        <rosparam file="$(find skratch_description)/config/slam_parameters.yaml" command="load" />
+    </node>
+
+    <!-- Load Navigation stack (move_base + amcl) -->
+    <include file="$(find skratch_navigation)/launch/move_base.launch">
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    </include>
+
+    <!-- RViz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find skratch_description)/config/navigation.rviz" output="screen" />
+</launch>

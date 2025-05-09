@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">    
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="robot">    
     <gazebo>
-        <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-            <parameters>$(find kinova_arm_moveit_config)/config/ros2_controllers.yaml</parameters>
-        </plugin>   
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+            <robotParam>robot_description</robotParam>
+        </plugin>
     </gazebo>
-    
     <gazebo reference="kinova_camera">
         <sensor type="depth" name="arm_camera">
             <pose>0.06 0.05 0 1.57 0 1.57</pose>

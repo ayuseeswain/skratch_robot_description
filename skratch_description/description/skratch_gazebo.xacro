@@ -1,11 +1,7 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="robot">
     <gazebo>
         <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
-                <ros>
-                    <remapping>cmd_vel:=cmd_vel</remapping>
-                    <remapping>odom:=odom</remapping>
-                </ros>
                 <commandTopic>cmd_vel</commandTopic>
                 <odometryTopic>odom</odometryTopic>
                 <odometryFrame>odom</odometryFrame>
@@ -36,11 +32,9 @@
                 </range>
             </ray>
             <plugin name="lidar_front" filename="libgazebo_ros_ray_sensor.so">
-                <ros>
-                    <argument>--ros-args --remap ~/out:=front_lidar_scan</argument>
-                </ros>
+                <topicName>front_lidar_scan</topicName>
                 <output_type>sensor_msgs/LaserScan</output_type>
-                <frame_name>front_lidar</frame_name>
+                <frameName>front_lidar</frameName>
             </plugin>
         </sensor>
     </gazebo>

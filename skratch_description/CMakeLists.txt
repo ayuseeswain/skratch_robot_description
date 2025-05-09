@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 2.8.3)
 project(skratch_description)
 
+# Keep C/C++ standard settings (they are harmless in ROS 1)
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
 endif()
@@ -13,18 +14,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-find_package(ament_cmake REQUIRED)
+# ROS 1 build system
+find_package(catkin REQUIRED)
 
+catkin_package()
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  
-  ament_lint_auto_find_test_dependencies()
-endif()
-
+# Install description assets
 install(
   DIRECTORY config description launch meshes
-  DESTINATION share/${PROJECT_NAME}
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
-
-ament_package()

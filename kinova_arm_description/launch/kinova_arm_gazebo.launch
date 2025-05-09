@@ -1,0 +1,38 @@
+<launch>
+  <!-- Simulation time -->
+  <arg name="use_sim_time" default="true" />
+  <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+  <!-- Load robot_description from Xacro -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find kinova_arm_description)/description/kinova_arm.urdf.xacro'" />
+
+  <!-- Robot State Publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+  </node>
+
+  <!-- Launch Gazebo with ROS 1 integration -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false" />
+    <arg name="use_sim_time" value="true" />
+  </include>
+
+  <!-- Spawn robot entity in Gazebo -->
+  <node name="spawn_kinova_arm" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-param robot_description -model kinova_arm" />
+
+  <!-- Load controllers (arm, gripper, joint state) -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="joint_state_controller kinova_arm_controller kinova_gripper_controller" />
+
+  <!-- RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kinova_arm_description)/config/simulation.rviz" output="screen">
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+  </node>
+
+  <!-- Optional static transform (uncomment if needed) -->
+  <!--
+  <node pkg="tf" type="static_transform_publisher" name="odom_to_arm_base"
+        args="0 0 0 0 0 0 odom arm_base_link 100" />
+  -->
+</launch>

@@ -1,0 +1,35 @@
+<launch>
+    <!-- Use simulated time -->
+    <arg name="use_sim_time" default="true" />
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Launch Gazebo with a specific world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find skratch_description)/config/simple_environment.sdf"/>
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+    </include>
+
+    <!-- Load robot description -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find skratch_description)/description/skratch_robot.urdf.xacro'" />
+
+    <!-- Spawn robot model into Gazebo -->
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
+          args="-unpause -urdf -model skratch -param robot_description"/>
+
+    <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+    </node>
+
+    <!-- Static transform base_footprint -> base_link -->
+    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_base_link" args="0 0 0 0 0 0 base_footprint base_link 100"/>
+
+    <!-- LIDAR remapping (ROS 1 way) -->
+    <node name="lidar_remap" pkg="topic_tools" type="relay" args="/lidar_front/out /scan" output="screen"/>
+
+     <!-- Joint state publisher GUI -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+    </node>
+</launch>
